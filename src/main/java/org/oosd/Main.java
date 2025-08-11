@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -39,12 +40,33 @@ public class Main extends Application {
     private void showMainScreen() {
         VBox mainScreen = new VBox(10);
         mainScreen.setPadding(new Insets(20));
-        Button startButton = new Button("Start Game");
 
+        Label label = new Label("Main Screen");
+        Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> showGameScreen());
 
-        mainScreen.getChildren().add(startButton);
+        Button configButton = new Button("Configuration");
+        configButton.setOnAction(e -> showConfigScreen());
+
+
+        Button exitButton = new Button("Exit");
+        exitButton.setOnAction(e->System.exit(0));
+
+        mainScreen.getChildren().addAll(label,startButton, configButton, exitButton);
         root.getChildren().setAll(mainScreen);
+    }
+
+    private void showConfigScreen(){
+        VBox configScreen = new VBox(10);
+        configScreen.setPadding(new Insets(20));
+
+        Label label = new Label("Configuration");
+
+        Button backButton = new Button("Back");
+        backButton.setOnAction(e -> showMainScreen());
+
+        configScreen.getChildren().addAll(label, backButton);
+        root.getChildren().setAll(configScreen);
     }
 
     private void showGameScreen() {
