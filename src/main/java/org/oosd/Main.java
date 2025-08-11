@@ -4,9 +4,7 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -25,6 +23,18 @@ public class Main extends Application {
     private double dy = 3;       // Y velocity
 
     private boolean hasShadow = false;
+
+    private String colorString = "RED";
+    private Color getColor(){
+        return switch (colorString){
+            case "GREEN" -> Color.GREEN;
+            case "BLUE" -> Color.BLUE;
+            default -> Color.RED;
+        };
+    }
+
+    private int size = 10;
+
     private final double fieldWidth = 400;
     private final double fieldHeight = 300;
 
@@ -69,10 +79,38 @@ public class Main extends Application {
         shadowCB.setSelected(hasShadow);
         shadowCB.setOnAction(e->hasShadow = shadowCB.isSelected());
 
+        Label colorLabel = new Label("Color");
+        RadioButton rbRed = new RadioButton("RED");
+        RadioButton rbGreen = new RadioButton("GREEN");
+        RadioButton rbBlue = new RadioButton("BLUE");
+        ToggleGroup colorGroup = new ToggleGroup();
+        rbRed.setToggleGroup(colorGroup);
+        rbRed.setOnAction(e->colorString ="RED");
+        rbGreen.setToggleGroup(colorGroup);
+        rbGreen.setOnAction(e->colorString ="GREEN");
+        rbBlue.setToggleGroup(colorGroup);
+        rbBlue.setOnAction(e->colorString ="BLUE");
+        switch (colorString){
+            case "GREEN" -> rbGreen.setSelected(true);
+            case "BLUE" -> rbBlue.setSelected(true);
+            default -> rbRed.setSelected(true);
+        }
+
+        Label sizeLabel = new Label("Size: " + size);
+        Slider sizeSlider = new Slider(5, 20, size);
+        sizeSlider.setShowTickLabels(true);
+        sizeSlider.setShowTickMarks(true);
+        sizeSlider.setMajorTickUnit(5);
+        sizeSlider.valueProperty().addListener(
+                (obs, oldVal, newVal) -> {
+                    size = newVal.intValue();
+                    sizeLabel.setText("Size: " + size);
+                });
+
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
 
-        configScreen.getChildren().addAll(label, shadowCB, backButton);
+        configScreen.getChildren().addAll(label, shadowCB, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
         root.getChildren().setAll(configScreen);
     }
 
@@ -85,7 +123,7 @@ public class Main extends Application {
         field.setStroke(Color.BLACK);
 
         // Create red ball
-        Circle ball = new Circle(10, Color.RED);
+        Circle ball = new Circle(size, getColor());
         ball.setCenterX(fieldWidth / 2);
         ball.setCenterY(fieldHeight / 2);
 
@@ -109,17 +147,13 @@ public class Main extends Application {
         // Key control
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.UP) {
-                dx = 0;
-                dy = -3;
+                dy = dy>0?dy+1:dy-1;
             } else if (e.getCode() == KeyCode.DOWN) {
-                dx = 0;
-                dy = 3;
+                dy = dy<0?dy+1:dy-1;
             } else if (e.getCode() == KeyCode.LEFT) {
-                dx = -3;
-                dy = 0;
+                dx = dx<0?dx+1:dx-1;
             } else if (e.getCode() == KeyCode.RIGHT) {
-                dx = 3;
-                dy = 0;
+                dx = dx>0?dx+1:dx-1;
             }
         });
 
