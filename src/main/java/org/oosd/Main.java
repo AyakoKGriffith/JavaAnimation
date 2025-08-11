@@ -2,7 +2,9 @@ package org.oosd;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.DropShadow;
@@ -12,6 +14,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class Main extends Application {
 
@@ -43,6 +47,8 @@ public class Main extends Application {
         root = new StackPane();
         scene = new Scene(root, fieldWidth, fieldHeight);
 
+        scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
+
         showMainScreen();
 
         primaryStage.setTitle("JavaFX Multi-Screen Game");
@@ -55,18 +61,23 @@ public class Main extends Application {
         mainScreen.setPadding(new Insets(20));
 
         Label label = new Label("Main Screen");
+        label.getStyleClass().add("title-label");
         Button startButton = new Button("Start Game");
         startButton.setOnAction(e -> showGameScreen());
+        startButton.getStyleClass().add("menu-button");
 
         Button configButton = new Button("Configuration");
         configButton.setOnAction(e -> showConfigScreen());
+        configButton.getStyleClass().add("menu-button");
 
 
         Button exitButton = new Button("Exit");
-        exitButton.setOnAction(e->System.exit(0));
+        exitButton.setOnAction(e->showExitConfirmation());
+        exitButton.getStyleClass().add("menu-button");
 
         mainScreen.getChildren().addAll(label,startButton, configButton, exitButton);
         root.getChildren().setAll(mainScreen);
+        mainScreen.setAlignment(Pos.CENTER);
     }
 
     private void showConfigScreen(){
@@ -74,6 +85,7 @@ public class Main extends Application {
         configScreen.setPadding(new Insets(20));
 
         Label label = new Label("Configuration");
+        label.getStyleClass().add("title-label");
 
         CheckBox shadowCB = new CheckBox("Has Shadow");
         shadowCB.setSelected(hasShadow);
@@ -109,9 +121,11 @@ public class Main extends Application {
 
         Button backButton = new Button("Back");
         backButton.setOnAction(e -> showMainScreen());
+        backButton.getStyleClass().add("menu-button");
 
         configScreen.getChildren().addAll(label, shadowCB, colorLabel, rbRed, rbGreen, rbBlue, sizeLabel, sizeSlider, backButton);
         root.getChildren().setAll(configScreen);
+        configScreen.setAlignment(Pos.CENTER);
     }
 
     private void showGameScreen() {
@@ -180,6 +194,16 @@ public class Main extends Application {
 
         root.getChildren().setAll(gamePane);
         gamePane.requestFocus();  // Ensure pane gets key input
+    }
+
+    public void showExitConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Exit Confirmation");
+        alert.setContentText("Are you sure you want to exit?");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            Platform.exit();
+        }
     }
 
     public static void main(String[] args) {
