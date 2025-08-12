@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import org.oosd.UI.*;
+import org.oosd.controller.GameController;
 import org.oosd.model.Game;
 
 import java.util.Optional;
@@ -37,13 +38,15 @@ public class Main extends Application implements Frame {
     @Override
     public void start (Stage primaryStage){
         game = new Game();
+        GameController gc = new GameController(game);
         root = new StackPane();
-        root.setAlignment(Pos.CENTER);
-        Scene scene = new Scene (root, Game.fieldWidth + 40, Game.fieldHeight + 120);
+        Scene scene = new Scene (root, Game.fieldWidth + 2 * Env.HORIZONTAL_MARGIN, Game.fieldHeight + Env.TOP_MARGIN + Env.BOTTOM_MARGIN);
+        scene.setOnKeyPressed(e -> gc.receiveKeyPress(e.getCode()));
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         primaryStage.setTitle("JavaFX Multi-Screen Game");
         primaryStage.setScene(scene);
         primaryStage.show();
+        primaryStage.setResizable(false);
         buildScreen();
         primaryStage.setOnCloseRequest(event->{
             event.consume();
