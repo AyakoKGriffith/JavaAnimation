@@ -12,8 +12,8 @@ public class GameController {
         switch (key) {
             case KeyCode.UP -> game.increaseY();
             case KeyCode.DOWN -> game.decreaseY();
-            case KeyCode.LEFT -> game.increaseX();
-            case KeyCode.RIGHT -> game.decreaseX();
+            case KeyCode.RIGHT -> game.increaseX();
+            case KeyCode.LEFT -> game.decreaseX();
         }
     }
 }
