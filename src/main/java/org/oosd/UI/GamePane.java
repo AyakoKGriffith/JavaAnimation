@@ -48,6 +48,9 @@ public class GamePane extends Pane {
         field.setStroke(Color.BLACK);
         field.setStrokeWidth(1.0);
 
+        Rectangle clip = new Rectangle(0,0,Game.fieldWidth,Game.fieldHeight);
+        setClip(clip);
+
         ball = new Circle(game.getSize(), game.getColor());
 
         if (game.isHasShadow()){
