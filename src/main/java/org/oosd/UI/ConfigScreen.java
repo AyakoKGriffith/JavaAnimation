@@ -120,5 +120,3 @@ public class ConfigScreen implements ScreenWithGame{
         }
     }
 }
-
-
