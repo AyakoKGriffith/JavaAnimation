@@ -1,7 +1,6 @@
 package org.oosd.UI.sprite;
 
 import org.oosd.model.Game;
-
 import java.util.Random;
 
 public class SpriteFactory {
