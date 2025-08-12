@@ -6,12 +6,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import org.oosd.UI.sprite.Sprite;
+import org.oosd.UI.sprite.SpriteFactory;
 import org.oosd.model.Game;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GamePane extends Pane {
     private AnimationTimer timer;
     private Circle ball;
     private Game game;
+    private final List<Sprite> sprites;
+    public GamePane(){
+        sprites = new ArrayList<>();
+    }
 
     public void setGame(Game game) {
         this.game = game;
@@ -23,6 +32,14 @@ public class GamePane extends Pane {
                 ball.setCenterY(game.getY());
             }
         };
+    }
+
+    private void initSprites(int num){
+        sprites.clear();
+        for(int i = 0;i<num;++i) {
+            Sprite sprite = SpriteFactory.getFactory().createSprite();
+            sprites.add(sprite);
+        }
     }
 
     private void buildGamePane(){
@@ -41,6 +58,9 @@ public class GamePane extends Pane {
         }
 
         getChildren().setAll(field, ball);
+        initSprites(10);
+        for(Sprite sprite : sprites)
+            getChildren().add(sprite.getNode());
         requestFocus(); //Ensure pane gets key input
     }
 
