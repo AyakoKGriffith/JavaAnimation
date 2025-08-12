@@ -39,7 +39,7 @@ public class Main extends Application implements Frame {
         game = new Game();
         root = new StackPane();
         root.setAlignment(Pos.CENTER);
-        Scene scene = new Scene (root, Game.fieldWidth, Game.fieldHeight);
+        Scene scene = new Scene (root, Game.fieldWidth + 40, Game.fieldHeight + 120);
         scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         primaryStage.setTitle("JavaFX Multi-Screen Game");
         primaryStage.setScene(scene);
